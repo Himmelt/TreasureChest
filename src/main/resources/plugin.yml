@@ -1,0 +1,16 @@
+name: TreasureChest
+version: 1.7.10-0.0.1
+author: Himmelt
+main: org.soraworld.treasure.TreasureChest
+website: https://github.com/Himmelt/TreasureChest
+description: TreasureChest.
+
+commands:
+  treasure:
+    description: "TreasureChest - https://github.com/Himmelt/TreasureChest"
+    usage: "[TreasureChest] /treasure save|reload|lang|..."
+    permission: treasure.admin
+    permission-message: "[TreasureChest] You have no permission <treasure.admin>"
+permissions:
+  treasure.admin:
+    default: op

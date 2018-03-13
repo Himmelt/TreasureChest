@@ -1,0 +1,23 @@
+apply plugin: 'java'
+
+group 'org.soraworld.treasure'
+version '1.7.10-0.0.1'
+description = 'TreasureChest Plugin'
+archivesBaseName = "TreasureChest"
+
+sourceCompatibility = targetCompatibility = '1.7'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.7'
+}
+
+repositories {
+    jcenter()
+    maven {
+        name = 'spigot'
+        url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+}
+
+dependencies {
+    compile 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT'
+}
