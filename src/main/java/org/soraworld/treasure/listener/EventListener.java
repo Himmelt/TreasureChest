@@ -10,8 +10,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
-import org.soraworld.treasure.task.SpawnChestTask;
-import org.soraworld.treasure.util.Vec3i;
+import org.soraworld.treasure.task.TreasureTask;
 
 public class EventListener implements Listener {
 
@@ -27,13 +26,12 @@ public class EventListener implements Listener {
     public void destroyTreasure(InventoryCloseEvent event) {
         Inventory inv = event.getInventory();
         if (inv != null && inv.getHolder() instanceof Chest) {
-            Chest chest = (Chest) inv.getHolder();
-            Block block = chest.getBlock();
+            inv.clear();
+            Block block = ((Chest) inv.getHolder()).getBlock();
             if (block != null) {
-                Vec3i loc = Vec3i.getVec3i(block);
-                if (config.hasLoc(loc)) {
+                if (config.hasTreasure(block)) {
                     block.setType(Material.AIR);
-                    new SpawnChestTask(loc, config).runTaskLater(plugin, config.getLocDelay(loc));
+                    TreasureTask.runNewTask(block, config, plugin);
                 }
             }
         }

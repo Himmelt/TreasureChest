@@ -1,6 +1,7 @@
 package org.soraworld.treasure.command;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
 import org.soraworld.treasure.config.LangKeys;
@@ -36,6 +37,16 @@ public class CommandTreasure extends IICommand {
                 } else {
                     config.lang(args.get(0));
                     ServerUtils.send(sender, LangKeys.format("language", config.lang()));
+                }
+                return true;
+            }
+        });
+        addSub(new IICommand("open") {
+            @Override
+            public boolean execute(CommandSender sender, ArrayList<String> args) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    player.openInventory(config.getTreasure(null).getInventory());
                 }
                 return true;
             }
