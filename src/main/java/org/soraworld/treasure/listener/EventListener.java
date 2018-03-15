@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
+import org.soraworld.treasure.core.TreasureBox;
 import org.soraworld.treasure.task.TreasureTask;
 
 public class EventListener implements Listener {
@@ -26,12 +27,15 @@ public class EventListener implements Listener {
     public void destroyTreasure(InventoryCloseEvent event) {
         Inventory inv = event.getInventory();
         if (inv != null && inv.getHolder() instanceof Chest) {
-            inv.clear();
             Block block = ((Chest) inv.getHolder()).getBlock();
             if (block != null) {
-                if (config.hasTreasure(block)) {
-                    block.setType(Material.AIR);
-                    TreasureTask.runNewTask(block, config, plugin);
+                TreasureBox treasure = config.getTreasure(block);
+                if (treasure != null) {
+                    if (treasure.isDisappear()) {
+                        inv.clear();
+                        block.setType(Material.AIR);
+                    }
+                    TreasureTask.runNewTask(block, treasure, plugin);
                 }
             }
         }

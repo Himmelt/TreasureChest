@@ -33,11 +33,11 @@ public class LangKeys {
     private void load() {
         if (!file.exists()) {
             try {
-                file.getParentFile().mkdirs();
+                folder.mkdirs();
                 InputStream input = this.getClass().getResourceAsStream("/lang/" + lang + ".yml");
                 FileUtils.copyInputStreamToFile(input, file);
             } catch (Throwable e) {
-                //e.printStackTrace();
+                e.printStackTrace();
                 ServerUtils.console("lang file load exception !!!");
             }
         }

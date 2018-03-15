@@ -1,5 +1,6 @@
 package org.soraworld.treasure.command;
 
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -46,7 +47,11 @@ public class CommandTreasure extends IICommand {
             public boolean execute(CommandSender sender, ArrayList<String> args) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
-                    player.openInventory(config.getTreasure(null).getInventory());
+                    System.out.println(player.getWorld().getName());
+                    Block block = player.getWorld().getBlockAt(0, 100, 0);
+                    System.out.println(block);
+                    System.out.println(block.hashCode());
+                    player.openInventory(config.getTreasure(block).getInventory());
                 }
                 return true;
             }

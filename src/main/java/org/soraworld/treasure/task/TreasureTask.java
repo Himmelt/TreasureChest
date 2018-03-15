@@ -5,9 +5,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.soraworld.treasure.config.Config;
 import org.soraworld.treasure.core.TreasureBox;
 
 public class TreasureTask extends BukkitRunnable {
@@ -31,14 +31,14 @@ public class TreasureTask extends BukkitRunnable {
             Chest chest = (Chest) state;
             Inventory inv = chest.getBlockInventory();
             inv.clear();
-            inv.setItem(1, box.getItem(1).clone());
+            for (int i = 0; i < box.getRandAmount() && i < inv.getSize(); i++) {
+                ItemStack stack = box.getNextRandItem();
+                if (stack != null) inv.setItem(i, stack.clone());
+            }
         }
     }
 
-    public static void runNewTask(Block block, Config config, Plugin plugin) {
-        TreasureBox box = config.getTreasure(block);
-        if (box != null) {
-            new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh());
-        }
+    public static void runNewTask(Block block, TreasureBox box, Plugin plugin) {
+        new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh());
     }
 }
