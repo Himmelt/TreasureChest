@@ -32,3 +32,14 @@ boxes:
     # 是否广播，玩家打开宝箱时是否广播(未实现)
     broadcast: false
 ```
+
+### 权限
+```yaml
+permissions:
+  # 管理权限，执行/treasure 命令需要
+  treasure.admin:
+    default: op
+  # 使用权限，拥有才权限才可以打开宝箱(默认：false)
+  treasure.use:
+    default: false
+```
