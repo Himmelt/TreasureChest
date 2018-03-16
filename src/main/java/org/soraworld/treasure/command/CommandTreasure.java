@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
 import org.soraworld.treasure.config.LangKeys;
+import org.soraworld.treasure.core.TreasureBox;
 import org.soraworld.treasure.util.ServerUtils;
 
 import java.util.ArrayList;
@@ -42,18 +43,46 @@ public class CommandTreasure extends IICommand {
                 return true;
             }
         });
+        addSub(new IICommand("create") {
+            @Override
+            public boolean execute(CommandSender sender, ArrayList<String> args) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    Block select = config.getSelect(player);
+                    if (select != null) {
+                        if (config.hasTreasure(select)) {
+                            ServerUtils.send(player, LangKeys.format("existTreasure"));
+                        } else {
+                            config.createTreasure(select);
+                            ServerUtils.send(player, LangKeys.format("createTreasure"));
+                        }
+                    } else {
+                        ServerUtils.send(player, LangKeys.format("notSelect"));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
         addSub(new IICommand("open") {
             @Override
             public boolean execute(CommandSender sender, ArrayList<String> args) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
-                    System.out.println(player.getWorld().getName());
-                    Block block = player.getWorld().getBlockAt(0, 100, 0);
-                    System.out.println(block);
-                    System.out.println(block.hashCode());
-                    player.openInventory(config.getTreasure(block).getInventory());
+                    Block select = config.getSelect(player);
+                    if (select != null) {
+                        TreasureBox box = config.getTreasure(select);
+                        if (box != null) {
+                            player.openInventory(box.getInventory());
+                        } else {
+                            ServerUtils.send(player, LangKeys.format("noTreasure"));
+                        }
+                    } else {
+                        ServerUtils.send(player, LangKeys.format("notSelect"));
+                    }
+                    return true;
                 }
-                return true;
+                return false;
             }
         });
     }

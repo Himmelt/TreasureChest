@@ -4,9 +4,11 @@ import net.minecraft.server.v1_7_R4.NBTTagCompound;
 import net.minecraft.server.v1_7_R4.NBTTagList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.soraworld.treasure.config.LangKeys;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,7 +26,7 @@ public class TreasureBox {
     private final Inventory inv;
     private final Random random = new Random();
 
-    public TreasureBox(int refresh, int rand_amount, int line_amount,
+    public TreasureBox(Block block, int refresh, int rand_amount, int line_amount,
                        boolean engross, boolean override, boolean disappear, boolean broadcast,
                        NBTTagList list) {
         this.refresh = refresh < 0 ? 0 : refresh;
@@ -41,8 +43,7 @@ public class TreasureBox {
         this.override = override;
         this.disappear = disappear;
         this.broadcast = broadcast;
-        this.inv = Bukkit.createInventory(null, 9 * line_amount, "");
-        System.out.println(inv);
+        this.inv = Bukkit.createInventory(null, 9 * line_amount, getInvName(block));
         for (int i = 0; i < list.size(); i++) {
             NBTTagCompound item = list.get(i);
             int slot = item.getByte("slot");
@@ -51,6 +52,13 @@ public class TreasureBox {
             }
         }
     }
+
+    private String getInvName(Block block) {
+        if (block != null && block.getWorld() != null)
+            return LangKeys.format("invName", block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+        return "";
+    }
+
 
     public int getRefresh() {
         return refresh;
@@ -101,4 +109,17 @@ public class TreasureBox {
         return stacks.get(random.nextInt(stacks.size() - 1));
     }
 
+    public NBTTagList toNBTList() {
+        NBTTagList list = new NBTTagList();
+        for (byte i = 0; i < inv.getSize(); i++) {
+            ItemStack stack = inv.getItem(i);
+            if (stack != null && stack.getType() != Material.AIR) {
+                NBTTagCompound item = new NBTTagCompound();
+                CraftItemStack.asNMSCopy(stack).save(item);
+                item.setByte("slot", i);
+                list.add(item);
+            }
+        }
+        return list;
+    }
 }

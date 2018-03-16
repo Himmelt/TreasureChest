@@ -4,3 +4,12 @@
 language: "current language is: %s ."
 configSaved: "config file saved."
 configReloaded: "config file reloaded."
+
+existTreasure: "a treasure-box already exist at selected pos."
+createTreasure: "created a treasure-box at selected pos."
+notSelect: "no selected pos."
+noTreasure: "no treasure-box at selected pos."
+blockSelected: "selected a pos."
+
+noPermission: "you need permission [%s] to open this treasure-box."
+invName: "TreasureBox [%s,%d,%d,%d]"

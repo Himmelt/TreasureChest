@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.soraworld.treasure.core.TreasureBox;
 import org.soraworld.treasure.util.ServerUtils;
 
@@ -26,6 +27,7 @@ public class Config {
     private final YamlConfiguration config = new YamlConfiguration();
 
     private final HashMap<Block, TreasureBox> blocks = new HashMap<>();
+    private final HashMap<Player, Block> selects = new HashMap<>();
 
     public Config(File path) {
         this.file = new File(path, "config.yml");
@@ -35,6 +37,10 @@ public class Config {
 
     public void load() {
         if (!file.exists()) {
+            if (lang == null || lang.isEmpty()) {
+                lang = "en_us";
+            }
+            langKeys.setLang(lang);
             save();
             return;
         }
@@ -44,6 +50,7 @@ public class Config {
             if (lang == null || lang.isEmpty()) {
                 lang = "en_us";
             }
+            langKeys.setLang(lang);
             blocks.clear();
             NBTTagCompound comp = null;
             try {
@@ -56,23 +63,17 @@ public class Config {
             ConfigurationSection boxes = config.getConfigurationSection("boxes");
             if (boxes != null) {
                 for (String key : boxes.getKeys(false)) {
-                    System.out.println(key);
                     ConfigurationSection box = boxes.getConfigurationSection(key);
                     String[] ss = key.split(",");
-                    System.out.println("box:" + box);
                     if (box != null && ss.length == 4) {
-                        System.out.println(ss[0]);
                         World world = Bukkit.getServer().getWorld(ss[0]);
-                        System.out.println("world:" + world);
                         if (world != null) {
                             try {
                                 Block block = world.getBlockAt(Integer.valueOf(ss[1]), Integer.valueOf(ss[2]), Integer.valueOf(ss[3]));
-                                System.out.println(block);
                                 if (block != null) {
-                                    System.out.println(block.hashCode());
                                     NBTTagList list = comp.getList(key, 10);
                                     if (list == null) list = new NBTTagList();
-                                    blocks.put(block, new TreasureBox(
+                                    blocks.put(block, new TreasureBox(block,
                                             box.getInt("refresh"),
                                             box.getInt("rand_amount"),
                                             box.getInt("line_amount"),
@@ -92,20 +93,19 @@ public class Config {
             e.printStackTrace();
             ServerUtils.console("config file load exception !!!");
         }
-
-        langKeys.setLang(lang);
     }
 
     public void save() {
         try {
+            ServerUtils.console("config saving...");
             config.set("lang", lang);
-
-            ConfigurationSection boxes = config.getConfigurationSection("boxes");
+            NBTTagCompound comp = new NBTTagCompound();
+            ConfigurationSection boxes = config.createSection("boxes");
             if (boxes != null) {
                 for (Block block : blocks.keySet()) {
                     World world = block.getWorld();
                     if (world != null && !world.getName().isEmpty()) {
-                        ConfigurationSection box = boxes.getConfigurationSection(world.getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ());
+                        ConfigurationSection box = boxes.createSection(world.getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ());
                         if (box != null) {
                             TreasureBox treasure = blocks.get(block);
                             box.set("refresh", treasure.getRefresh());
@@ -115,11 +115,14 @@ public class Config {
                             box.set("override", treasure.isOverride());
                             box.set("disappear", treasure.isDisappear());
                             box.set("broadcast", treasure.isBroadcast());
+                            comp.set(world.getName() + "," + block.getX() + "," + block.getY() + "," + block.getZ(), treasure.toNBTList());
                         }
                     }
                 }
             }
-
+            data.delete();
+            data.createNewFile();
+            NBTCompressedStreamTools.a(comp, new FileOutputStream(data));
             config.save(file);
         } catch (Throwable e) {
             e.printStackTrace();
@@ -142,7 +145,21 @@ public class Config {
         return blocks.get(block) != null;
     }
 
+    public void createTreasure(Block block) {
+        if (block != null) {
+            blocks.put(block, new TreasureBox(block, 100, 5, 6, false, true, true, false, new NBTTagList()));
+        }
+    }
+
     public TreasureBox getTreasure(Block block) {
         return blocks.get(block);
+    }
+
+    public void setSelect(Player player, Block block) {
+        selects.put(player, block);
+    }
+
+    public Block getSelect(Player player) {
+        return selects.get(player);
     }
 }

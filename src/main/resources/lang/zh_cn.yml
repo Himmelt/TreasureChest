@@ -4,3 +4,13 @@
 language: "当前语言为: %s ."
 configSaved: "配置文件已保存."
 configReloaded: "配置文件已重载."
+
+existTreasure: "所选位置已经存在宝箱."
+createTreasure: "在所选位置成功创建宝箱."
+notSelect: "当前没有选中位置."
+noTreasure: "所选位置不存在宝箱."
+blockSelected: "已选中一个位置."
+
+noPermission: "你需要[%s]权限才能打开这个宝箱."
+
+invName: "宝箱[%s,%d,%d,%d]"
