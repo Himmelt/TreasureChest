@@ -43,3 +43,5 @@ permissions:
   treasure.use:
     default: false
 ```
+
+TODO: plugin.yml 添加子命令
