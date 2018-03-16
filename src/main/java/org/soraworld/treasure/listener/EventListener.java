@@ -46,6 +46,7 @@ public class EventListener implements Listener {
         if (event.getPlayer() instanceof Player) {
             Player player = (Player) event.getPlayer();
             Inventory inv = event.getInventory();
+            // TODO double-chest ????
             if (inv != null && inv.getHolder() instanceof Chest) {
                 if (config.hasTreasure(((Chest) inv.getHolder()).getBlock())) {
                     if (!player.hasPermission("treasure.use")) {
