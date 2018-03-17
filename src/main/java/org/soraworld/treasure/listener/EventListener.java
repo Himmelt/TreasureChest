@@ -107,6 +107,7 @@ public class EventListener implements Listener {
             DoubleChest chest = (DoubleChest) inv.getHolder();
             Block l = ((Chest) chest.getLeftSide()).getBlock();
             Block r = ((Chest) chest.getRightSide()).getBlock();
+            // TODO BUG NullPointException ???
             TreasureBox left = config.getTreasure(l);
             TreasureBox right = config.getTreasure(r);
 
