@@ -27,6 +27,7 @@ public class TreasureTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        running.remove(block);
         if (block.getType() == Material.AIR || block.getType() == Material.CHEST || box.isOverride()) {
             block.setType(Material.CHEST);
             block.setData(meta);
@@ -39,7 +40,6 @@ public class TreasureTask extends BukkitRunnable {
                     ItemStack stack = box.getNextRandItem();
                     if (stack != null) inv.setItem(i, stack.clone());
                 }
-                running.remove(block);
             }
         }
     }
