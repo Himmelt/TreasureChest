@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -176,6 +178,19 @@ public class Config {
             block.setData(meta);
             TreasureBox box = blocks.get(block);
             TreasureTask.runNewTask(block, box, plugin);
+        }
+    }
+
+    public void stopAll() {
+        for (Block block : blocks.keySet()) {
+            BlockState state = block.getState();
+            if (state instanceof Chest) {
+                ((Chest) state).getBlockInventory().clear();
+            }
+            byte meta = block.getData();
+            block.setType(Material.AIR);
+            block.setData(meta);
+            // TODO stop running task !!!
         }
     }
 }

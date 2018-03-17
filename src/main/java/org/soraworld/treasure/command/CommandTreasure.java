@@ -117,6 +117,13 @@ public class CommandTreasure extends IICommand {
                 return true;
             }
         });
+        addSub(new IICommand("stop") {
+            @Override
+            public boolean execute(CommandSender sender, ArrayList<String> args) {
+                config.stopAll();
+                return true;
+            }
+        });
     }
 
     public boolean execute(CommandSender sender, ArrayList<String> args) {

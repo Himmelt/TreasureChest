@@ -11,6 +11,7 @@
 /treasure open world,x,y,z 打开给定坐标处的宝箱仓库
 /treasure run 启动所有宝箱生成，如果宝箱不是覆盖模式则不会生成
 /treasure run force 强制启动所有宝箱生成，原来的非空气方块会被覆盖
+/treasure stop 停止所有宝箱并移除
 ```
 
 ### 配置
