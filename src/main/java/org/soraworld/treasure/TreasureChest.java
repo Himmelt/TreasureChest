@@ -16,7 +16,7 @@ public class TreasureChest extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        config = new Config(this.getDataFolder());
+        config = new Config(this.getDataFolder(), this);
         config.load();
         config.save();
         this.getServer().getPluginManager().registerEvents(new EventListener(config, this), this);
