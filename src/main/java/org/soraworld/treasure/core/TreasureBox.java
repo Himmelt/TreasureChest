@@ -23,6 +23,8 @@ public class TreasureBox {
     private boolean disappear;
     private boolean broadcast;
 
+    private boolean opening = false;
+
     private final Inventory inv;
     private final Random random = new Random();
 
@@ -106,7 +108,7 @@ public class TreasureBox {
         }
         if (stacks.size() <= 0) return null;
         if (stacks.size() == 1) return stacks.get(0);
-        return stacks.get(random.nextInt(stacks.size() - 1));
+        return stacks.get(random.nextInt(stacks.size()));
     }
 
     public NBTTagList toNBTList() {
@@ -121,5 +123,13 @@ public class TreasureBox {
             }
         }
         return list;
+    }
+
+    public boolean canOpen() {
+        return !engross || !opening;
+    }
+
+    public void setOpen(boolean opening) {
+        this.opening = opening;
     }
 }

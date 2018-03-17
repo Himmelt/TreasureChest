@@ -10,11 +10,14 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.soraworld.treasure.core.TreasureBox;
 
+import java.util.HashSet;
+
 public class TreasureTask extends BukkitRunnable {
 
     private final Block block;
     private final TreasureBox box;
     private final byte meta;
+    private static final HashSet<Block> running = new HashSet<>();
 
     public TreasureTask(Block block, TreasureBox box) {
         this.block = block;
@@ -36,11 +39,15 @@ public class TreasureTask extends BukkitRunnable {
                     ItemStack stack = box.getNextRandItem();
                     if (stack != null) inv.setItem(i, stack.clone());
                 }
+                running.remove(block);
             }
         }
     }
 
     public static void runNewTask(Block block, TreasureBox box, Plugin plugin) {
-        new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh());
+        if (!running.contains(block)) {
+            running.add(block);
+            new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh());
+        }
     }
 }

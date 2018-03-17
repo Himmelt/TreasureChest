@@ -1,5 +1,6 @@
 package org.soraworld.treasure.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -69,20 +70,51 @@ public class CommandTreasure extends IICommand {
             public boolean execute(CommandSender sender, ArrayList<String> args) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
-                    Block select = config.getSelect(player);
-                    if (select != null) {
-                        TreasureBox box = config.getTreasure(select);
+                    if (args.isEmpty()) {
+                        Block select = config.getSelect(player);
+                        if (select != null) {
+                            TreasureBox box = config.getTreasure(select);
+                            if (box != null) {
+                                player.openInventory(box.getInventory());
+                            } else {
+                                ServerUtils.send(player, LangKeys.format("noTreasure"));
+                            }
+                        } else {
+                            ServerUtils.send(player, LangKeys.format("notSelect"));
+                        }
+                    } else {
+                        String[] ss = args.get(0).split(",");
+                        Block block = null;
+                        try {
+                            if (ss != null && ss.length == 3) {
+                                block = player.getWorld().getBlockAt(Integer.valueOf(ss[0]), Integer.valueOf(ss[1]), Integer.valueOf(ss[2]));
+                            } else if (ss != null && ss.length == 4) {
+                                block = Bukkit.getServer().getWorld(ss[0]).getBlockAt(Integer.valueOf(ss[1]), Integer.valueOf(ss[2]), Integer.valueOf(ss[3]));
+                            } else {
+                                ServerUtils.send(player, LangKeys.format("errorArgs"));
+                            }
+                        } catch (Throwable ignored) {
+                            ServerUtils.send(player, LangKeys.format("errorArgs"));
+                        }
+                        TreasureBox box = config.getTreasure(block);
                         if (box != null) {
                             player.openInventory(box.getInventory());
                         } else {
                             ServerUtils.send(player, LangKeys.format("noTreasure"));
                         }
-                    } else {
-                        ServerUtils.send(player, LangKeys.format("notSelect"));
                     }
+
                     return true;
                 }
                 return false;
+            }
+        });
+        addSub(new IICommand("run") {
+            @Override
+            public boolean execute(CommandSender sender, ArrayList<String> args) {
+                if (args.isEmpty()) config.runAll(false);
+                else if (args.get(0).equals("force")) config.runAll(true);
+                return true;
             }
         });
     }

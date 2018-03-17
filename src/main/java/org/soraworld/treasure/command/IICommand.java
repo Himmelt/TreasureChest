@@ -1,15 +1,16 @@
 package org.soraworld.treasure.command;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.soraworld.treasure.util.ListUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 
-public abstract class IICommand implements CommandExecutor {
+public abstract class IICommand implements TabExecutor {
 
     private final String name;
     private final List<String> aliases;
@@ -48,6 +49,34 @@ public abstract class IICommand implements CommandExecutor {
                 this.subs.put(alias, sub);
             }
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return getTabCompletions(sender, ListUtils.arrayList(args));
+    }
+
+    private List<String> getTabCompletions(CommandSender sender, ArrayList<String> args) {
+        if (args.size() == 1) {
+            return getMatchList(args.get(0), subs.keySet());
+        } else if (args.size() >= 2) {
+            IICommand sub = subs.get(args.remove(0));
+            if (sub != null) return sub.getTabCompletions(sender, args);
+            else return new ArrayList<>();
+        } else {
+            return new ArrayList<>(subs.keySet());
+        }
+    }
+
+    private static List<String> getMatchList(String arg, Collection<String> possibles) {
+        if (arg.isEmpty()) return new ArrayList<>(possibles);
+        ArrayList<String> list = new ArrayList<>();
+        for (String s : possibles) {
+            if (s.startsWith(arg)) {
+                list.add(s);
+            }
+        }
+        return list;
     }
 
 }

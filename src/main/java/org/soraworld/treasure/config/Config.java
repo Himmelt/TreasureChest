@@ -4,12 +4,15 @@ import net.minecraft.server.v1_7_R4.NBTCompressedStreamTools;
 import net.minecraft.server.v1_7_R4.NBTTagCompound;
 import net.minecraft.server.v1_7_R4.NBTTagList;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.core.TreasureBox;
+import org.soraworld.treasure.task.TreasureTask;
 import org.soraworld.treasure.util.ServerUtils;
 
 import java.io.File;
@@ -29,10 +32,13 @@ public class Config {
     private final HashMap<Block, TreasureBox> blocks = new HashMap<>();
     private final HashMap<Player, Block> selects = new HashMap<>();
 
-    public Config(File path) {
+    private final Plugin plugin;
+
+    public Config(File path, Plugin plugin) {
         this.file = new File(path, "config.yml");
         this.data = new File(path, "inventory.nbt");
         this.langKeys = new LangKeys(new File(path, "lang"));
+        this.plugin = plugin;
     }
 
     public void load() {
@@ -161,5 +167,15 @@ public class Config {
 
     public Block getSelect(Player player) {
         return selects.get(player);
+    }
+
+    public void runAll(boolean force) {
+        for (Block block : blocks.keySet()) {
+            byte meta = block.getData();
+            if (force) block.setType(Material.CHEST);
+            block.setData(meta);
+            TreasureBox box = blocks.get(block);
+            TreasureTask.runNewTask(block, box, plugin);
+        }
     }
 }

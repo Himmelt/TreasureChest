@@ -6,7 +6,11 @@
 /treasure save 保存配置到文件
 /treasure reload 从文件重新载入配置
 /treasure create 在左键选择的位置创建宝箱(配置是默认的，需要手动修改配置文件后重载)
-/treasure open 在左键选择的位置打开宝箱仓库配置
+/treasure open 打开最近左键选择的位置处的宝箱仓库
+/treasure open x,y,z 打开玩家所在世界的<x,y,z>坐标处的宝箱仓库
+/treasure open world,x,y,z 打开给定坐标处的宝箱仓库
+/treasure run 启动所有宝箱生成，如果宝箱不是覆盖模式则不会生成
+/treasure run force 强制启动所有宝箱生成，原来的非空气方块会被覆盖
 ```
 
 ### 配置
@@ -23,7 +27,7 @@ boxes:
     rand_amount: 5
     # 仓库的大小，行数，每行9个格子
     line_amount: 6
-    # 是否独占，一个玩家打开宝箱时，其他玩家无法打开(未实现)
+    # 是否独占，一个玩家打开宝箱时，其他玩家无法打开
     engross: false
     # 是否覆盖，如果目标位置已经存在其他方块，是否用宝箱覆盖
     override: true

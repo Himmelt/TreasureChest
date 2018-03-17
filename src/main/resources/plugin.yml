@@ -1,5 +1,5 @@
 name: TreasureChest
-version: 1.7.10-1.0.0
+version: 1.7.10-1.0.2
 author: Himmelt
 main: org.soraworld.treasure.TreasureChest
 website: https://github.com/Himmelt/TreasureChest
@@ -15,4 +15,4 @@ permissions:
   treasure.admin:
     default: op
   treasure.use:
-    default: false
+    default: op
