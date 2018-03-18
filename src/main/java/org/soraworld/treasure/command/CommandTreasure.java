@@ -86,9 +86,9 @@ public class CommandTreasure extends IICommand {
                         String[] ss = args.get(0).split(",");
                         Block block = null;
                         try {
-                            if (ss != null && ss.length == 3) {
+                            if (ss.length == 3) {
                                 block = player.getWorld().getBlockAt(Integer.valueOf(ss[0]), Integer.valueOf(ss[1]), Integer.valueOf(ss[2]));
-                            } else if (ss != null && ss.length == 4) {
+                            } else if (ss.length == 4) {
                                 block = Bukkit.getServer().getWorld(ss[0]).getBlockAt(Integer.valueOf(ss[1]), Integer.valueOf(ss[2]), Integer.valueOf(ss[3]));
                             } else {
                                 ServerUtils.send(player, LangKeys.format("errorArgs"));

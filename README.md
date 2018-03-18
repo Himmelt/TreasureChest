@@ -18,6 +18,10 @@
 ```yaml
 # 语言
 lang: zh_cn
+# 是否在启用插件时初始化所有宝箱
+run_init: true
+# 初始化宝箱时是否强制覆盖
+force_init: false
 # 宝箱
 boxes:
   # 宝箱唯一id，也是坐标，世界名尽量短且不要带"."
@@ -28,8 +32,6 @@ boxes:
     rand_amount: 5
     # 仓库的大小，行数，每行9个格子
     line_amount: 6
-    # 是否独占，一个玩家打开宝箱时，其他玩家无法打开
-    engross: false
     # 是否覆盖，如果目标位置已经存在其他方块，是否用宝箱覆盖
     override: true
     # 是否消失，关闭宝箱后，宝箱是否消失
@@ -48,5 +50,3 @@ permissions:
   treasure.use:
     default: false
 ```
-
-TODO: plugin.yml 添加子命令

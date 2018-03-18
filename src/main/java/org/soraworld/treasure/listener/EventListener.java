@@ -10,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
@@ -31,123 +30,44 @@ public class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void selectBlock(PlayerInteractEvent event) {
+    public void clickBlock(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (player != null && player.hasPermission("treasure.admin") && event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            Block block = event.getClickedBlock();
-            if (block != null && block.getType() != Material.AIR) {
+        Block block = event.getClickedBlock();
+        if (block != null && event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            if (player.hasPermission("treasure.admin") && player.getItemInHand().getType() == Material.BLAZE_ROD) {
+                event.setCancelled(true);
                 config.setSelect(player, block);
                 ServerUtils.send(player, LangKeys.format("blockSelected"));
             }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void openTreasure(InventoryOpenEvent event) {
-        if (event.getPlayer() instanceof Player) {
-            Player player = (Player) event.getPlayer();
-            Inventory inv = event.getInventory();
-            if (inv != null && inv.getHolder() instanceof DoubleChest) {
-                DoubleChest chest = (DoubleChest) inv.getHolder();
-                TreasureBox left = config.getTreasure(((Chest) chest.getLeftSide()).getBlock());
-                TreasureBox right = config.getTreasure(((Chest) chest.getRightSide()).getBlock());
-                if (left != null || right != null) {
-                    if (!player.hasPermission("treasure.use")) {
-                        event.setCancelled(true);
-                        ServerUtils.send(player, LangKeys.format("noPermission", "treasure.use"));
-                    } else {
-                        if (left != null && right != null) {
-                            if (!left.canOpen() || !right.canOpen()) {
-                                event.setCancelled(true);
-                                ServerUtils.send(player, LangKeys.format("engrossBox"));
-                            } else {
-                                left.setOpen(true);
-                                right.setOpen(true);
-                            }
-                        } else if (left != null) {
-                            if (!left.canOpen()) {
-                                event.setCancelled(true);
-                                ServerUtils.send(player, LangKeys.format("engrossBox"));
-                            } else {
-                                left.setOpen(true);
-                            }
-                        } else {
-                            if (!right.canOpen()) {
-                                event.setCancelled(true);
-                                ServerUtils.send(player, LangKeys.format("engrossBox"));
-                            } else {
-                                right.setOpen(true);
-                            }
-                        }
-                    }
-                }
-            } else if (inv != null && inv.getHolder() instanceof Chest) {
-                TreasureBox box = config.getTreasure(((Chest) inv.getHolder()).getBlock());
-                if (box != null) {
-                    if (!player.hasPermission("treasure.use")) {
-                        event.setCancelled(true);
-                        ServerUtils.send(player, LangKeys.format("noPermission", "treasure.use"));
-                    } else {
-                        if (!box.canOpen()) {
-                            event.setCancelled(true);
-                            ServerUtils.send(player, LangKeys.format("engrossBox"));
-                        } else {
-                            box.setOpen(true);
-                        }
-                    }
-                }
+        } else if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (block.getType() == Material.CHEST && config.hasTreasure(block) && !player.hasPermission("treasure.use")) {
+                event.setCancelled(true);
+                ServerUtils.send(player, LangKeys.format("noPermission", "treasure.use"));
             }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void destroyTreasure(InventoryCloseEvent event) {
+    public void closeInventory(InventoryCloseEvent event) {
         Inventory inv = event.getInventory();
-        if (inv != null && inv.getHolder() instanceof DoubleChest) {
+        if (inv.getHolder() instanceof DoubleChest) {
             DoubleChest chest = (DoubleChest) inv.getHolder();
-            Block l = ((Chest) chest.getLeftSide()).getBlock();
-            Block r = ((Chest) chest.getRightSide()).getBlock();
-            // TODO BUG NullPointException ???
-            TreasureBox left = config.getTreasure(l);
-            TreasureBox right = config.getTreasure(r);
+            closeInventory(((Chest) chest.getLeftSide()).getBlock(), ((Chest) chest.getLeftSide()).getBlockInventory());
+            closeInventory(((Chest) chest.getRightSide()).getBlock(), ((Chest) chest.getRightSide()).getBlockInventory());
+        } else if (inv.getHolder() instanceof Chest) {
+            closeInventory(((Chest) inv.getHolder()).getBlock(), inv);
+        }
+    }
 
-            if (left != null && right != null) {
-                left.setOpen(false);
-                right.setOpen(false);
-                if (left.isDisappear() || right.isDisappear()) {
+    private void closeInventory(Block block, Inventory inv) {
+        if (block != null) {
+            TreasureBox treasure = config.getTreasure(block);
+            if (treasure != null) {
+                if (treasure.isDisappear()) {
                     inv.clear();
-                    l.setType(Material.AIR);
-                    r.setType(Material.AIR);
+                    block.setType(Material.AIR);
                 }
-                TreasureTask.runNewTask(l, left, plugin);
-                TreasureTask.runNewTask(r, right, plugin);
-            } else if (left != null) {
-                left.setOpen(false);
-                if (left.isDisappear()) {
-                    inv.clear();
-                    l.setType(Material.AIR);
-                }
-                TreasureTask.runNewTask(l, left, plugin);
-            } else if (right != null) {
-                right.setOpen(false);
-                if (right.isDisappear()) {
-                    inv.clear();
-                    r.setType(Material.AIR);
-                }
-                TreasureTask.runNewTask(r, right, plugin);
-            }
-        } else if (inv != null && inv.getHolder() instanceof Chest) {
-            Block block = ((Chest) inv.getHolder()).getBlock();
-            if (block != null) {
-                TreasureBox treasure = config.getTreasure(block);
-                if (treasure != null) {
-                    treasure.setOpen(false);
-                    if (treasure.isDisappear()) {
-                        inv.clear();
-                        block.setType(Material.AIR);
-                    }
-                    TreasureTask.runNewTask(block, treasure, plugin);
-                }
+                TreasureTask.runNewTask(block, treasure, plugin);
             }
         }
     }

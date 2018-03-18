@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.soraworld.treasure.config.LangKeys;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
 
 public class TreasureBox {
 
@@ -23,14 +23,9 @@ public class TreasureBox {
     private boolean disappear;
     private boolean broadcast;
 
-    private boolean opening = false;
-
     private final Inventory inv;
-    private final Random random = new Random();
 
-    public TreasureBox(Block block, int refresh, int rand_amount, int line_amount,
-                       boolean engross, boolean override, boolean disappear, boolean broadcast,
-                       NBTTagList list) {
+    public TreasureBox(Block block, int refresh, int rand_amount, int line_amount, boolean override, boolean disappear, boolean broadcast, NBTTagList list) {
         this.refresh = refresh < 0 ? 0 : refresh;
 
         if (rand_amount < 0) this.rand_amount = 0;
@@ -98,7 +93,7 @@ public class TreasureBox {
         return broadcast;
     }
 
-    public ItemStack getNextRandItem() {
+    public List<ItemStack> getItems() {
         ArrayList<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack stack = inv.getItem(i);
@@ -106,9 +101,7 @@ public class TreasureBox {
                 stacks.add(stack);
             }
         }
-        if (stacks.size() <= 0) return null;
-        if (stacks.size() == 1) return stacks.get(0);
-        return stacks.get(random.nextInt(stacks.size()));
+        return stacks;
     }
 
     public NBTTagList toNBTList() {
@@ -125,11 +118,4 @@ public class TreasureBox {
         return list;
     }
 
-    public boolean canOpen() {
-        return !engross || !opening;
-    }
-
-    public void setOpen(boolean opening) {
-        this.opening = opening;
-    }
 }

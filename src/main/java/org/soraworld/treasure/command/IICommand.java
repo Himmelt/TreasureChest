@@ -14,9 +14,9 @@ public abstract class IICommand implements TabExecutor {
 
     private final String name;
     private final List<String> aliases;
-    protected final TreeMap<String, IICommand> subs = new TreeMap<>();
+    final TreeMap<String, IICommand> subs = new TreeMap<>();
 
-    public IICommand(String name, String... aliases) {
+    IICommand(String name, String... aliases) {
         this.name = name;
         this.aliases = ListUtils.arrayList(aliases);
     }
@@ -37,7 +37,7 @@ public abstract class IICommand implements TabExecutor {
         return false;
     }
 
-    public String getUsage() {
+    private String getUsage() {
         return "";
     }
 

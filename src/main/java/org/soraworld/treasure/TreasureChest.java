@@ -9,6 +9,8 @@ import org.soraworld.treasure.config.Config;
 import org.soraworld.treasure.listener.EventListener;
 import org.soraworld.treasure.util.ListUtils;
 
+import java.util.List;
+
 public class TreasureChest extends JavaPlugin {
 
     private Config config;
@@ -18,6 +20,7 @@ public class TreasureChest extends JavaPlugin {
     public void onEnable() {
         config = new Config(this.getDataFolder(), this);
         config.load();
+        config.initRun();
         config.save();
         this.getServer().getPluginManager().registerEvents(new EventListener(config, this), this);
         command = new CommandTreasure("treasure", this, config);
@@ -33,4 +36,8 @@ public class TreasureChest extends JavaPlugin {
         return command.execute(sender, ListUtils.arrayList(args));
     }
 
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return super.onTabComplete(sender, command, alias, args);
+    }
 }

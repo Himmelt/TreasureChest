@@ -25,7 +25,8 @@ import java.util.HashMap;
 public class Config {
 
     private String lang = "en_us";
-
+    private boolean run_init = true;
+    private boolean force_init = false;
     private final File file;
     private final File data;
     private final LangKeys langKeys;
@@ -49,7 +50,6 @@ public class Config {
                 lang = "en_us";
             }
             langKeys.setLang(lang);
-            save();
             return;
         }
         try {
@@ -59,6 +59,8 @@ public class Config {
                 lang = "en_us";
             }
             langKeys.setLang(lang);
+            run_init = config.getBoolean("run_init");
+            force_init = config.getBoolean("force_init");
             blocks.clear();
             NBTTagCompound comp = null;
             try {
@@ -85,7 +87,6 @@ public class Config {
                                             box.getInt("refresh"),
                                             box.getInt("rand_amount"),
                                             box.getInt("line_amount"),
-                                            box.getBoolean("engross"),
                                             box.getBoolean("override"),
                                             box.getBoolean("disappear"),
                                             box.getBoolean("broadcast"), list));
@@ -103,10 +104,16 @@ public class Config {
         }
     }
 
+    public void initRun() {
+        if (run_init) runAll(force_init);
+    }
+
     public void save() {
         try {
             ServerUtils.console("config saving...");
             config.set("lang", lang);
+            config.set("run_init", run_init);
+            config.set("force_init", force_init);
             NBTTagCompound comp = new NBTTagCompound();
             ConfigurationSection boxes = config.createSection("boxes");
             if (boxes != null) {
@@ -119,7 +126,6 @@ public class Config {
                             box.set("refresh", treasure.getRefresh());
                             box.set("rand_amount", treasure.getRandAmount());
                             box.set("line_amount", treasure.getLineAmount());
-                            box.set("engross", treasure.isEngross());
                             box.set("override", treasure.isOverride());
                             box.set("disappear", treasure.isDisappear());
                             box.set("broadcast", treasure.isBroadcast());
@@ -150,12 +156,12 @@ public class Config {
     }
 
     public boolean hasTreasure(Block block) {
-        return blocks.get(block) != null;
+        return block != null && blocks.get(block) != null;
     }
 
     public void createTreasure(Block block) {
         if (block != null) {
-            blocks.put(block, new TreasureBox(block, 100, 5, 6, false, true, true, false, new NBTTagList()));
+            blocks.put(block, new TreasureBox(block, 100, 5, 6, true, true, false, new NBTTagList()));
         }
     }
 
