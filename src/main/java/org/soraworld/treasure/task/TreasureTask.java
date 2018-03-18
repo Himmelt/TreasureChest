@@ -1,5 +1,6 @@
 package org.soraworld.treasure.task;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -47,7 +48,13 @@ public class TreasureTask extends BukkitRunnable {
     public static void runNewTask(Block block, TreasureBox box, Plugin plugin) {
         if (!running.contains(block)) {
             running.add(block);
-            new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh());
+            new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh()).cancel();
         }
     }
+
+    public static void stopAll(Plugin plugin) {
+        Bukkit.getScheduler().cancelTasks(plugin);
+        running.clear();
+    }
+
 }

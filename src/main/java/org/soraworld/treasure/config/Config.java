@@ -186,11 +186,12 @@ public class Config {
             BlockState state = block.getState();
             if (state instanceof Chest) {
                 ((Chest) state).getBlockInventory().clear();
+                byte meta = block.getData();
+                block.setType(Material.AIR);
+                block.setData(meta);
             }
-            byte meta = block.getData();
-            block.setType(Material.AIR);
-            block.setData(meta);
-            // TODO stop running task !!!
+            TreasureTask.stopAll(plugin);
         }
     }
+
 }
