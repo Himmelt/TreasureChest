@@ -31,7 +31,7 @@ force_init: false
 boxes:
   # 宝箱唯一id，也是坐标，世界名尽量短且不要带"."
   world,0,100,0:
-    # 打开宝箱后再次刷新的时间(x20tick，标准速度为 1秒)
+    # 打开宝箱后再次刷新的时间(x20tick，标准速度为 x1秒)
     refresh: 10
     # 从仓库随机生成到宝箱的物品数量
     rand_amount: 5
