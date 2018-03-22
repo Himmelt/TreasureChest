@@ -57,6 +57,7 @@ public class CommandTreasure extends IICommand {
                         } else {
                             config.createTreasure(select);
                             ServerUtils.send(player, LangKeys.format("createTreasure"));
+                            config.save();
                         }
                     } else {
                         ServerUtils.send(player, LangKeys.format("notSelect"));
