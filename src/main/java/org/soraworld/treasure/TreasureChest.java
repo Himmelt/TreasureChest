@@ -37,7 +37,8 @@ public class TreasureChest extends JavaPlugin {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return super.onTabComplete(sender, command, alias, args);
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+        return command.onTabComplete(sender, cmd, alias, args);
     }
+
 }

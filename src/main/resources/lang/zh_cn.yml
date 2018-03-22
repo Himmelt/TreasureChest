@@ -12,5 +12,8 @@ noTreasure: "所选位置不存在宝箱."
 blockSelected: "已选中一个位置."
 errorArgs: "参数错误"
 noPermission: "你需要<&4&l%s&r>权限才能打开这个宝箱."
+noCopy: "请先复制仓库内容."
+copySuccess: "已复制."
+pasteSuccess: "已粘贴."
 
 invName: "宝箱[%s,%d,%d,%d]"

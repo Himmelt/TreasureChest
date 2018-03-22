@@ -14,6 +14,11 @@
 /treasure stop 停止所有宝箱并移除
 ```
 
+### 说明
+```markdown
+手持烈焰棒左击方块，选中位置 !!!
+```
+
 ### 配置
 ```yaml
 # 语言
@@ -26,8 +31,8 @@ force_init: false
 boxes:
   # 宝箱唯一id，也是坐标，世界名尽量短且不要带"."
   world,0,100,0:
-    # 打开宝箱后再次刷新的时间
-    refresh: 100
+    # 打开宝箱后再次刷新的时间(x20tick，标准速度为 1秒)
+    refresh: 10
     # 从仓库随机生成到宝箱的物品数量
     rand_amount: 5
     # 仓库的大小，行数，每行9个格子
@@ -48,5 +53,5 @@ permissions:
     default: op
   # 使用权限，拥有此权限才可以打开宝箱(默认：false)
   treasure.use:
-    default: false
+    default: op
 ```

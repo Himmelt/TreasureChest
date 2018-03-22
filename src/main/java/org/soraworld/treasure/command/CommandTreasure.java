@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
 import org.soraworld.treasure.config.LangKeys;
@@ -56,6 +57,55 @@ public class CommandTreasure extends IICommand {
                         } else {
                             config.createTreasure(select);
                             ServerUtils.send(player, LangKeys.format("createTreasure"));
+                        }
+                    } else {
+                        ServerUtils.send(player, LangKeys.format("notSelect"));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        addSub(new IICommand("copy") {
+            @Override
+            public boolean execute(CommandSender sender, ArrayList<String> args) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    Block select = config.getSelect(player);
+                    if (select != null) {
+                        if (config.hasTreasure(select)) {
+                            TreasureBox box = config.getTreasure(select);
+                            config.setCopy(player, box.getInventory());
+                            ServerUtils.send(player, LangKeys.format("copySuccess"));
+                        } else {
+                            ServerUtils.send(player, LangKeys.format("noTreasure"));
+                        }
+                    } else {
+                        ServerUtils.send(player, LangKeys.format("notSelect"));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        addSub(new IICommand("paste") {
+            @Override
+            public boolean execute(CommandSender sender, ArrayList<String> args) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    Block select = config.getSelect(player);
+                    if (select != null) {
+                        if (config.hasTreasure(select)) {
+                            TreasureBox box = config.getTreasure(select);
+                            Inventory copy = config.getCopy(player);
+                            if (copy != null) {
+                                config.getTreasure(select).pasteInventory(copy);
+                                ServerUtils.send(player, LangKeys.format("pasteSuccess"));
+                            } else {
+                                ServerUtils.send(player, LangKeys.format("noCopy"));
+                            }
+                        } else {
+                            ServerUtils.send(player, LangKeys.format("noTreasure"));
                         }
                     } else {
                         ServerUtils.send(player, LangKeys.format("notSelect"));

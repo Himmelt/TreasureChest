@@ -118,4 +118,11 @@ public class TreasureBox {
         return list;
     }
 
+    public void pasteInventory(Inventory src) {
+        inv.clear();
+        for (int i = 0; i < inv.getSize() && i < src.getSize(); i++) {
+            inv.setItem(i, src.getItem(i));
+        }
+    }
+
 }

@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
@@ -70,6 +71,11 @@ public class EventListener implements Listener {
                 TreasureTask.runNewTask(block, treasure, plugin);
             }
         }
+    }
+
+    @EventHandler
+    public void onSave(WorldSaveEvent event) {
+        config.save();
     }
 
 }

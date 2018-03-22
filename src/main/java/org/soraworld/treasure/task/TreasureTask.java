@@ -59,7 +59,7 @@ public class TreasureTask extends BukkitRunnable {
     public static void runNewTask(Block block, TreasureBox box, Plugin plugin) {
         if (!running.contains(block) && box != null) {
             running.add(block);
-            new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh());
+            new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh() * 20);
         }
     }
 

@@ -12,5 +12,8 @@ noTreasure: "no treasure-box at selected pos."
 blockSelected: "selected a pos."
 errorArgs: "error args"
 noPermission: "you need permission <&4&l%s&r> to open this treasure-box."
+noCopy: "no copy from other treasure-box."
+copySuccess: "copy success."
+pasteSuccess: "paste success."
 
 invName: "Treasure [%s,%d,%d,%d]"

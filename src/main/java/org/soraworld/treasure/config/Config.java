@@ -12,6 +12,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.core.TreasureBox;
 import org.soraworld.treasure.task.TreasureTask;
@@ -34,6 +35,7 @@ public class Config {
 
     private final HashMap<Block, TreasureBox> blocks = new HashMap<>();
     private final HashMap<Player, Block> selects = new HashMap<>();
+    private final HashMap<Player, Inventory> origins = new HashMap<>();
 
     private final Plugin plugin;
 
@@ -161,7 +163,7 @@ public class Config {
 
     public void createTreasure(Block block) {
         if (block != null) {
-            blocks.put(block, new TreasureBox(block, 100, 5, 6, true, true, false, new NBTTagList()));
+            blocks.put(block, new TreasureBox(block, 10, 5, 6, true, true, false, new NBTTagList()));
         }
     }
 
@@ -178,6 +180,7 @@ public class Config {
     }
 
     public void runAll(boolean force) {
+        stopAll();
         for (Block block : blocks.keySet()) {
             byte meta = block.getData();
             if (force) block.setType(Material.CHEST);
@@ -188,6 +191,7 @@ public class Config {
     }
 
     public void stopAll() {
+        TreasureTask.stopAll(plugin);
         for (Block block : blocks.keySet()) {
             BlockState state = block.getState();
             if (state instanceof Chest) {
@@ -196,8 +200,15 @@ public class Config {
                 block.setType(Material.AIR);
                 block.setData(meta);
             }
-            TreasureTask.stopAll(plugin);
         }
+    }
+
+    public void setCopy(Player player, final Inventory src) {
+        origins.put(player, src);
+    }
+
+    public Inventory getCopy(Player player) {
+        return origins.get(player);
     }
 
 }
