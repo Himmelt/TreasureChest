@@ -112,7 +112,6 @@ public class Config {
 
     public void save() {
         try {
-            ServerUtils.console("config saving...");
             config.set("lang", lang);
             config.set("run_init", run_init);
             config.set("force_init", force_init);

@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
 import org.soraworld.treasure.config.LangKeys;
@@ -35,7 +36,15 @@ public class EventListener implements Listener {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
         if (block != null && event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            if (player.hasPermission("treasure.admin") && player.getItemInHand().getType() == Material.BLAZE_ROD) {
+            if (player.hasPermission("treasure.admin")) {
+                ItemStack stack = player.getItemInHand();
+                switch (stack.getType()) {
+                    case GOLD_SPADE:// create delete
+                        event.setCancelled(true);
+
+                    case GOLD_PICKAXE:// select open
+                    case GOLD_AXE:
+                }
                 event.setCancelled(true);
                 config.setSelect(player, block);
                 ServerUtils.send(player, LangKeys.format("blockSelected"));
