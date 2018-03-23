@@ -1,6 +1,8 @@
 # English Language File
 # Please use UTF-8 encoding
 
+TreasureChest: "[TreasureChest] "
+
 language: "current language is: %s ."
 configSaved: "config file saved."
 configReloaded: "config file reloaded."
@@ -11,9 +13,10 @@ notSelect: "no selected pos."
 noTreasure: "no treasure-box at selected pos."
 blockSelected: "selected a pos."
 errorArgs: "error args"
-noPermission: "you need permission <&4&l%s&r> to open this treasure-box."
+noPermission: "you need permission <&c%s&r> to open this treasure-box."
 noCopy: "no copy from other treasure-box."
 copySuccess: "copy success."
 pasteSuccess: "paste success."
+deleteTreasure: "deleted success."
 
 invName: "Treasure [%s,%d,%d,%d]"

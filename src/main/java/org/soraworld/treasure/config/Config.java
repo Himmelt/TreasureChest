@@ -166,6 +166,12 @@ public class Config {
         }
     }
 
+    public void deleteTreasure(Block block) {
+        if (block != null) {
+            blocks.remove(block);
+        }
+    }
+
     public TreasureBox getTreasure(Block block) {
         return blocks.get(block);
     }
@@ -209,5 +215,6 @@ public class Config {
     public Inventory getCopy(Player player) {
         return origins.get(player);
     }
+
 
 }

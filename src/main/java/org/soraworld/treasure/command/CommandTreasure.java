@@ -67,6 +67,24 @@ public class CommandTreasure extends IICommand {
                 return false;
             }
         });
+        addSub(new IICommand("delete") {
+            @Override
+            public boolean execute(CommandSender sender, ArrayList<String> args) {
+                if (sender instanceof Player) {
+                    Player player = (Player) sender;
+                    Block select = config.getSelect(player);
+                    if (config.hasTreasure(select)) {
+                        config.deleteTreasure(select);
+                        ServerUtils.send(player, LangKeys.format("deleteTreasure"));
+                        config.save();
+                    } else {
+                        ServerUtils.send(player, LangKeys.format("noTreasure"));
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
         addSub(new IICommand("copy") {
             @Override
             public boolean execute(CommandSender sender, ArrayList<String> args) {
@@ -97,7 +115,6 @@ public class CommandTreasure extends IICommand {
                     Block select = config.getSelect(player);
                     if (select != null) {
                         if (config.hasTreasure(select)) {
-                            TreasureBox box = config.getTreasure(select);
                             Inventory copy = config.getCopy(player);
                             if (copy != null) {
                                 config.getTreasure(select).pasteInventory(copy);
