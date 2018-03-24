@@ -119,6 +119,7 @@ public class TreasureBox {
     }
 
     public void pasteInventory(Inventory src) {
+        if (inv == src) return;
         inv.clear();
         for (int i = 0; i < inv.getSize() && i < src.getSize(); i++) {
             inv.setItem(i, src.getItem(i));

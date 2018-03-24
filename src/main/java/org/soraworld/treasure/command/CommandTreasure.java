@@ -188,7 +188,8 @@ public class CommandTreasure extends IICommand {
         addSub(new IICommand("stop") {
             @Override
             public boolean execute(CommandSender sender, ArrayList<String> args) {
-                config.stopAll();
+                if (args.isEmpty()) config.stopAll(false);
+                else if (args.get(0).equals("force")) config.stopAll(true);
                 return true;
             }
         });

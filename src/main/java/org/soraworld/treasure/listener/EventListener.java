@@ -155,7 +155,7 @@ public class EventListener implements Listener {
     }
 
     private void closeInventory(Block block, Inventory inv) {
-        if (block != null) {
+        if (block != null && inv != null) {
             TreasureBox treasure = config.getTreasure(block);
             if (treasure != null) {
                 if (treasure.isDisappear()) {

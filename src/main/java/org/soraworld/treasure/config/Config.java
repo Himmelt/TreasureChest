@@ -185,7 +185,7 @@ public class Config {
     }
 
     public void runAll(boolean force) {
-        stopAll();
+        stopAll(force);
         for (Block block : blocks.keySet()) {
             byte meta = block.getData();
             if (force) block.setType(Material.CHEST);
@@ -195,15 +195,21 @@ public class Config {
         }
     }
 
-    public void stopAll() {
+    public void stopAll(boolean force) {
         TreasureTask.stopAll(plugin);
-        for (Block block : blocks.keySet()) {
-            BlockState state = block.getState();
-            if (state instanceof Chest) {
-                ((Chest) state).getBlockInventory().clear();
-                byte meta = block.getData();
-                block.setType(Material.AIR);
-                block.setData(meta);
+        if (force) {
+            try {
+                for (Block block : blocks.keySet()) {
+                    BlockState state = block.getState();
+                    if (state instanceof Chest) {
+                        Inventory inv = ((Chest) state).getBlockInventory();
+                        if (inv != null) inv.clear();
+                        byte meta = block.getData();
+                        block.setType(Material.AIR);
+                        block.setData(meta);
+                    }
+                }
+            } catch (Throwable ignored) {
             }
         }
     }
@@ -215,6 +221,5 @@ public class Config {
     public Inventory getCopy(Player player) {
         return origins.get(player);
     }
-
 
 }

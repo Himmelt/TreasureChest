@@ -33,18 +33,23 @@ public class TreasureTask extends BukkitRunnable {
     @Override
     public void run() {
         running.remove(block);
+        System.out.println(block);
         if (block.getType() == Material.AIR || block.getType() == Material.CHEST || box.isOverride()) {
             block.setType(Material.CHEST);
             block.setData(meta);
             BlockState state = block.getState();
+            System.out.println(state);
             if (state instanceof Chest) {
                 Chest chest = (Chest) state;
                 Inventory inv = chest.getBlockInventory();
-                inv.clear();
-                List<ItemStack> stacks = box.getItems();
-                for (int i = 0; i < box.getRandAmount() && i < inv.getSize(); i++) {
-                    ItemStack stack = nextRandItem(stacks);
-                    if (stack != null) inv.setItem(i, stack.clone());
+                System.out.println(inv);
+                if (inv != null) {
+                    inv.clear();
+                    List<ItemStack> stacks = box.getItems();
+                    for (int i = 0; i < box.getRandAmount() && i < inv.getSize(); i++) {
+                        ItemStack stack = nextRandItem(stacks);
+                        if (stack != null) inv.setItem(i, stack.clone());
+                    }
                 }
             }
         }

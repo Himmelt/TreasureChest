@@ -14,7 +14,8 @@
 /treasure delete 删除最近选择的宝箱
 /treasure run 启动所有宝箱生成，如果宝箱不是覆盖模式则不会生成
 /treasure run force 强制启动所有宝箱生成，原来的非空气方块会被覆盖
-/treasure stop 停止所有宝箱并移除
+/treasure stop 停止所有宝箱刷新
+/treasure stop force 强制停止所有宝箱刷新并移除箱子
 ```
 
 ### 工具使用说明
