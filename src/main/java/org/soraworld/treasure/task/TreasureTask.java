@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.soraworld.treasure.core.TreasureBox;
+import org.soraworld.treasure.util.ServerUtils;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -42,13 +43,24 @@ public class TreasureTask extends BukkitRunnable {
             if (state instanceof Chest) {
                 Chest chest = (Chest) state;
                 Inventory inv = chest.getBlockInventory();
-                System.out.println(inv);
+                /*
+                java.lang.NullPointerException
+                    at org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventory.hashCode(CraftInventory.java:474) ~[spigot-1.7.10.jar:git-Spigot-1.7.9-R0.2-208-ge0f2e95]
+                    at java.lang.Object.toString(Object.java:236) ~[?:1.8.0_161]
+                    at java.lang.String.valueOf(String.java:2994) ~[?:1.8.0_161]
+                    at java.io.PrintStream.println(PrintStream.java:821) ~[?:1.8.0_161]
+                */
+                //System.out.println(inv);
                 if (inv != null) {
-                    inv.clear();
-                    List<ItemStack> stacks = box.getItems();
-                    for (int i = 0; i < box.getRandAmount() && i < inv.getSize(); i++) {
-                        ItemStack stack = nextRandItem(stacks);
-                        if (stack != null) inv.setItem(i, stack.clone());
+                    try {
+                        inv.clear();
+                        List<ItemStack> stacks = box.getItems();
+                        for (int i = 0; i < box.getRandAmount() && i < inv.getSize(); i++) {
+                            ItemStack stack = nextRandItem(stacks);
+                            if (stack != null) inv.setItem(i, stack.clone());
+                        }
+                    } catch (Throwable ignored) {
+                        ServerUtils.console("TreasureTask.run::inv errors");
                     }
                 }
             }
@@ -61,10 +73,10 @@ public class TreasureTask extends BukkitRunnable {
         return stacks.get(random.nextInt(stacks.size()));
     }
 
-    public static void runNewTask(Block block, TreasureBox box, Plugin plugin) {
+    public static void runNewTask(Block block, TreasureBox box, Plugin plugin, boolean immediate) {
         if (!running.contains(block) && box != null) {
             running.add(block);
-            new TreasureTask(block, box).runTaskLater(plugin, box.getRefresh() * 20);
+            new TreasureTask(block, box).runTaskLater(plugin, immediate ? 1 : box.getRefresh() * 20);
         }
     }
 

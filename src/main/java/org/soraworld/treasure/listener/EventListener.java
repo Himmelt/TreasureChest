@@ -1,5 +1,6 @@
 package org.soraworld.treasure.listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,6 +15,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -58,6 +60,33 @@ public class EventListener implements Listener {
                 ServerUtils.send(player, LangKeys.format("noPermission", "treasure.use"));
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void closeInventory(InventoryCloseEvent event) {
+        Inventory inv = event.getInventory();
+        if (inv.getHolder() instanceof DoubleChest) {
+            DoubleChest chest = (DoubleChest) inv.getHolder();
+            closeInventory(((Chest) chest.getLeftSide()).getBlock(), ((Chest) chest.getLeftSide()).getBlockInventory());
+            closeInventory(((Chest) chest.getRightSide()).getBlock(), ((Chest) chest.getRightSide()).getBlockInventory());
+        } else if (inv.getHolder() instanceof Chest) {
+            closeInventory(((Chest) inv.getHolder()).getBlock(), inv);
+        }
+    }
+
+    @EventHandler
+    public void onChunkLoad(final ChunkLoadEvent event) {
+        Bukkit.getScheduler().runTask(plugin, new Runnable() {
+            @Override
+            public void run() {
+                config.runChunk(event.getChunk(), true);
+            }
+        });
+    }
+
+    @EventHandler
+    public void onSave(WorldSaveEvent event) {
+        config.save();
     }
 
     private void leftClick(Cancellable event, Player player, Block block) {
@@ -142,18 +171,6 @@ public class EventListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void closeInventory(InventoryCloseEvent event) {
-        Inventory inv = event.getInventory();
-        if (inv.getHolder() instanceof DoubleChest) {
-            DoubleChest chest = (DoubleChest) inv.getHolder();
-            closeInventory(((Chest) chest.getLeftSide()).getBlock(), ((Chest) chest.getLeftSide()).getBlockInventory());
-            closeInventory(((Chest) chest.getRightSide()).getBlock(), ((Chest) chest.getRightSide()).getBlockInventory());
-        } else if (inv.getHolder() instanceof Chest) {
-            closeInventory(((Chest) inv.getHolder()).getBlock(), inv);
-        }
-    }
-
     private void closeInventory(Block block, Inventory inv) {
         if (block != null && inv != null) {
             TreasureBox treasure = config.getTreasure(block);
@@ -162,14 +179,9 @@ public class EventListener implements Listener {
                     inv.clear();
                     block.setType(Material.AIR);
                 }
-                TreasureTask.runNewTask(block, treasure, plugin);
+                TreasureTask.runNewTask(block, treasure, plugin, false);
             }
         }
-    }
-
-    @EventHandler
-    public void onSave(WorldSaveEvent event) {
-        config.save();
     }
 
 }
