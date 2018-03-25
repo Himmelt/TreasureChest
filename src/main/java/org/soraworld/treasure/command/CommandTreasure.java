@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
 import org.soraworld.treasure.config.LangKeys;
 import org.soraworld.treasure.core.TreasureBox;
+import org.soraworld.treasure.task.TreasureTask;
 import org.soraworld.treasure.util.ServerUtils;
 
 import java.util.ArrayList;
@@ -28,8 +29,11 @@ public class CommandTreasure extends IICommand {
         addSub(new IICommand("reload") {
             @Override
             public boolean execute(CommandSender sender, ArrayList<String> args) {
-                config.load();
-                ServerUtils.send(sender, LangKeys.format("configReloaded"));
+                if (config.load()) {
+                    ServerUtils.send(sender, LangKeys.format("configReloaded"));
+                } else {
+                    ServerUtils.send(sender, LangKeys.format("configLoadFailed"));
+                }
                 return true;
             }
         });
@@ -188,8 +192,7 @@ public class CommandTreasure extends IICommand {
         addSub(new IICommand("stop") {
             @Override
             public boolean execute(CommandSender sender, ArrayList<String> args) {
-                if (args.isEmpty()) config.stopAll(false);
-                else if (args.get(0).equals("force")) config.stopAll(true);
+                TreasureTask.stopAll(plugin);
                 return true;
             }
         });

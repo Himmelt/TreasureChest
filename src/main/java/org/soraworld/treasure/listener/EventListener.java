@@ -79,7 +79,9 @@ public class EventListener implements Listener {
         Bukkit.getScheduler().runTask(plugin, new Runnable() {
             @Override
             public void run() {
-                config.runChunk(event.getChunk(), true);
+                if (event.getChunk() != null) {
+                    config.runChunk(event.getChunk(), true);
+                }
             }
         });
     }

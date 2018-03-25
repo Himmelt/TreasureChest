@@ -34,23 +34,13 @@ public class TreasureTask extends BukkitRunnable {
     @Override
     public void run() {
         running.remove(block);
-        System.out.println(block);
         if (block.getType() == Material.AIR || block.getType() == Material.CHEST || box.isOverride()) {
             block.setType(Material.CHEST);
             block.setData(meta);
             BlockState state = block.getState();
-            System.out.println(state);
             if (state instanceof Chest) {
                 Chest chest = (Chest) state;
                 Inventory inv = chest.getBlockInventory();
-                /*
-                java.lang.NullPointerException
-                    at org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventory.hashCode(CraftInventory.java:474) ~[spigot-1.7.10.jar:git-Spigot-1.7.9-R0.2-208-ge0f2e95]
-                    at java.lang.Object.toString(Object.java:236) ~[?:1.8.0_161]
-                    at java.lang.String.valueOf(String.java:2994) ~[?:1.8.0_161]
-                    at java.io.PrintStream.println(PrintStream.java:821) ~[?:1.8.0_161]
-                */
-                //System.out.println(inv);
                 if (inv != null) {
                     try {
                         inv.clear();

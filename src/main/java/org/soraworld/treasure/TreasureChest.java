@@ -20,7 +20,6 @@ public class TreasureChest extends JavaPlugin {
     public void onEnable() {
         config = new Config(this.getDataFolder(), this);
         config.load();
-        //config.initRun();
         config.save();
         this.getServer().getPluginManager().registerEvents(new EventListener(config, this), this);
         command = new CommandTreasure("treasure", this, config);

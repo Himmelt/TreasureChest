@@ -29,8 +29,6 @@ import java.util.List;
 public class Config {
 
     private String lang = "en_us";
-    private boolean run_init = true;
-    private boolean force_init = false;
     private final File file;
     private final File data;
     private final LangKeys langKeys;
@@ -40,7 +38,6 @@ public class Config {
     private final HashMap<IChunk, List<Block>> chunks = new HashMap<>();
     private final HashMap<Player, Block> selects = new HashMap<>();
     private final HashMap<Player, Inventory> origins = new HashMap<>();
-    private static final List<Block> EMPTY_LIST = new ArrayList<>();
 
     private final Plugin plugin;
 
@@ -51,13 +48,13 @@ public class Config {
         this.plugin = plugin;
     }
 
-    public void load() {
+    public boolean load() {
         if (!file.exists()) {
             if (lang == null || lang.isEmpty()) {
                 lang = "en_us";
             }
             langKeys.setLang(lang);
-            return;
+            return true;
         }
         try {
             config.load(file);
@@ -66,9 +63,6 @@ public class Config {
                 lang = "en_us";
             }
             langKeys.setLang(lang);
-            run_init = config.getBoolean("run_init");
-            force_init = config.getBoolean("force_init");
-            //blocks.clear();
             clearBlocks();
             NBTTagCompound comp = null;
             try {
@@ -110,18 +104,14 @@ public class Config {
         } catch (Throwable e) {
             e.printStackTrace();
             ServerUtils.console("config file load exception !!!");
+            return false;
         }
-    }
-
-    public void initRun() {
-        if (run_init) runAll(force_init);
+        return true;
     }
 
     public void save() {
         try {
             config.set("lang", lang);
-            config.set("run_init", run_init);
-            config.set("force_init", force_init);
             NBTTagCompound comp = new NBTTagCompound();
             ConfigurationSection boxes = config.createSection("boxes");
             if (boxes != null) {
@@ -147,7 +137,7 @@ public class Config {
             NBTCompressedStreamTools.a(comp, new FileOutputStream(data));
             config.save(file);
         } catch (Throwable e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             ServerUtils.console("config file save exception !!!");
         }
     }
@@ -175,14 +165,14 @@ public class Config {
         }
     }
 
-    private void addChunkBlock(Block block) {
+    private void addChunkBlock(@Nonnull Block block) {
         Chunk chunk = block.getChunk();
         if (chunk != null) {
-            System.out.println("addChunkBlock:" + block + "|" + chunk);
-            List<Block> list = chunks.get(new IChunk(chunk));
+            IChunk iChunk = new IChunk(chunk);
+            List<Block> list = chunks.get(iChunk);
             if (list == null) {
                 list = new ArrayList<>();
-                chunks.put(new IChunk(chunk), list);
+                chunks.put(iChunk, list);
             }
             list.add(block);
         }
@@ -225,17 +215,17 @@ public class Config {
         return selects.get(player);
     }
 
-    public void runChunk(Chunk chunk, boolean force) {
-        System.out.println("run chunk:" + chunk + "|" + chunks.containsKey(new IChunk(chunk)));
-        if (chunk != null && chunks.containsKey(new IChunk(chunk))) {
-            for (Block block : chunks.get(new IChunk(chunk))) {
+    public void runChunk(@Nonnull Chunk chunk, boolean force) {
+        IChunk iChunk = new IChunk(chunk);
+        if (chunks.containsKey(iChunk)) {
+            for (Block block : chunks.get(iChunk)) {
                 runBlock(block, force);
             }
         }
     }
 
     public void runAll(boolean force) {
-        stopAll(false);
+        TreasureTask.stopAll(plugin);
         for (Block block : blocks.keySet()) {
             runBlock(block, force);
         }
@@ -249,43 +239,12 @@ public class Config {
         TreasureTask.runNewTask(block, box, plugin, true);
     }
 
-    public void stopAll(boolean force) {
-        TreasureTask.stopAll(plugin);
-        /*if (force) {
-            try {
-                for (Block block : blocks.keySet()) {
-                    Chunk chunk = block.getChunk();
-
-                    BlockState state = block.getState();
-                    if (state instanceof Chest) {
-                        Inventory inv = ((Chest) state).getBlockInventory();
-                        if (inv != null) inv.clear();
-                        //byte meta = block.getData();
-                        //block.setType(Material.AIR);
-                        //block.setData(meta);
-                    }
-                }
-            } catch (Throwable ignored) {
-                ServerUtils.console("Config.stopAll::inv errors");
-            }
-        }*/
-    }
-
     public void setCopy(Player player, final Inventory src) {
         origins.put(player, src);
     }
 
     public Inventory getCopy(Player player) {
         return origins.get(player);
-    }
-
-    public List<Block> getChunkBlocks(Chunk chunk) {
-        if (chunk != null) {
-            List<Block> list = chunks.get(new IChunk(chunk));
-            if (list != null) return list;
-            return EMPTY_LIST;
-        }
-        return EMPTY_LIST;
     }
 
 }

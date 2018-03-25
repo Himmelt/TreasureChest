@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.soraworld.treasure.config.LangKeys;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,6 @@ public class TreasureBox {
     private int refresh;
     private int rand_amount;
     private int line_amount;
-    private boolean engross;
     private boolean override;
     private boolean disappear;
     private boolean broadcast;
@@ -36,7 +36,6 @@ public class TreasureBox {
         else if (line_amount > 6) this.line_amount = 6;
         else this.line_amount = line_amount;
 
-        this.engross = engross;
         this.override = override;
         this.disappear = disappear;
         this.broadcast = broadcast;
@@ -56,13 +55,8 @@ public class TreasureBox {
         return "";
     }
 
-
     public int getRefresh() {
         return refresh;
-    }
-
-    public void setRefresh(int refresh) {
-        this.refresh = refresh;
     }
 
     public Inventory getInventory() {
@@ -75,10 +69,6 @@ public class TreasureBox {
 
     public int getLineAmount() {
         return line_amount;
-    }
-
-    public boolean isEngross() {
-        return engross;
     }
 
     public boolean isOverride() {
@@ -118,7 +108,7 @@ public class TreasureBox {
         return list;
     }
 
-    public void pasteInventory(Inventory src) {
+    public void pasteInventory(@Nonnull Inventory src) {
         if (inv == src) return;
         inv.clear();
         for (int i = 0; i < inv.getSize() && i < src.getSize(); i++) {

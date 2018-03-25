@@ -6,6 +6,7 @@ TreasureChest: "[随机宝箱] "
 language: "当前语言为: %s ."
 configSaved: "配置文件已保存."
 configReloaded: "配置文件已重载."
+configLoadFailed: "&c配置文件重载异常,请查看控制台报错信息!!!"
 
 existTreasure: "所选位置已经存在宝箱."
 createTreasure: "在所选位置成功创建宝箱."
