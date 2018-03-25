@@ -54,6 +54,7 @@ public class Config {
                 lang = "en_us";
             }
             langKeys.setLang(lang);
+            save();
             return true;
         }
         try {

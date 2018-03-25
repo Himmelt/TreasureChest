@@ -28,7 +28,7 @@ public class LangKeys {
         this.lang = lang;
         this.file = new File(folder, lang + ".yml");
         load();
-        ServerUtils.setHead(LangKeys.format("TreasureChest"));
+        ServerUtils.setHead(LangKeys.format("chatHead"));
     }
 
     private void load() {

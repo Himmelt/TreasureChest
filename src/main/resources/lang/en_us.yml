@@ -1,7 +1,7 @@
 # English Language File
 # Please use UTF-8 encoding
 
-TreasureChest: "[TreasureChest] "
+chatHead: "[TreasureChest] "
 
 language: "current language is: %s ."
 configSaved: "config file saved."
