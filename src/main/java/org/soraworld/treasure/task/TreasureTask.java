@@ -9,8 +9,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.soraworld.treasure.config.Config;
 import org.soraworld.treasure.core.TreasureBox;
-import org.soraworld.treasure.util.ServerUtils;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -23,6 +23,7 @@ public class TreasureTask extends BukkitRunnable {
     private final TreasureBox box;
     private final byte meta;
     private final Random random = new Random();
+    private static Config config;
     private static final HashSet<Block> running = new HashSet<>();
 
     private TreasureTask(Block block, @Nonnull TreasureBox box) {
@@ -49,8 +50,9 @@ public class TreasureTask extends BukkitRunnable {
                             ItemStack stack = nextRandItem(stacks);
                             if (stack != null) inv.setItem(i, stack.clone());
                         }
-                    } catch (Throwable ignored) {
-                        ServerUtils.console("TreasureTask.run::inv errors");
+                    } catch (Throwable e) {
+                        if (config.debug()) e.printStackTrace();
+                        config.console("TreasureTask.run::inv errors");
                     }
                 }
             }
@@ -63,7 +65,8 @@ public class TreasureTask extends BukkitRunnable {
         return stacks.get(random.nextInt(stacks.size()));
     }
 
-    public static void runNewTask(Block block, TreasureBox box, Plugin plugin, boolean immediate) {
+    public static void runNewTask(Block block, TreasureBox box, Plugin plugin, Config config, boolean immediate) {
+        TreasureTask.config = config;
         if (!running.contains(block) && box != null) {
             running.add(block);
             new TreasureTask(block, box).runTaskLater(plugin, immediate ? 1 : box.getRefresh() * 20);

@@ -21,10 +21,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.soraworld.treasure.config.Config;
-import org.soraworld.treasure.config.LangKeys;
 import org.soraworld.treasure.core.TreasureBox;
 import org.soraworld.treasure.task.TreasureTask;
-import org.soraworld.treasure.util.ServerUtils;
 
 import java.util.HashMap;
 
@@ -57,7 +55,7 @@ public class EventListener implements Listener {
             // normal player open treasure-box
             if (block != null && block.getType() == Material.CHEST && config.hasTreasure(block) && !player.hasPermission("treasure.use")) {
                 event.setCancelled(true);
-                ServerUtils.send(player, LangKeys.format("noPermission", "treasure.use"));
+                config.send(player, "noPermission", "treasure.use");
             }
         }
     }
@@ -106,10 +104,10 @@ public class EventListener implements Listener {
                 clicks.put(player, System.currentTimeMillis());
                 event.setCancelled(true);
                 if (config.hasTreasure(block)) {
-                    ServerUtils.send(player, LangKeys.format("existTreasure"));
+                    config.send(player, "existTreasure");
                 } else {
                     config.createTreasure(block);
-                    ServerUtils.send(player, LangKeys.format("createTreasure"));
+                    config.send(player, "createTreasure");
                     config.save();
                 }
             } else if (stack != null && stack.getType() == Material.GOLD_PICKAXE) {
@@ -119,16 +117,16 @@ public class EventListener implements Listener {
                 if (config.hasTreasure(block)) {
                     TreasureBox box = config.getTreasure(block);
                     config.setCopy(player, box.getInventory());
-                    ServerUtils.send(player, LangKeys.format("copySuccess"));
+                    config.send(player, "copySuccess");
                 } else {
-                    ServerUtils.send(player, LangKeys.format("noTreasure"));
+                    config.send(player, "noTreasure");
                 }
             } else if (stack != null && stack.getType() == Material.GOLD_AXE) {
                 // select
                 clicks.put(player, System.currentTimeMillis());
                 event.setCancelled(true);
                 config.setSelect(player, block);
-                ServerUtils.send(player, LangKeys.format("blockSelected"));
+                config.send(player, "blockSelected");
             }
         }
     }
@@ -141,10 +139,10 @@ public class EventListener implements Listener {
                 event.setCancelled(true);
                 if (config.hasTreasure(block)) {
                     config.deleteTreasure(block);
-                    ServerUtils.send(player, LangKeys.format("deleteTreasure"));
+                    config.send(player, "deleteTreasure");
                     config.save();
                 } else {
-                    ServerUtils.send(player, LangKeys.format("noTreasure"));
+                    config.send(player, "noTreasure");
                 }
             } else if (stack != null && stack.getType() == Material.GOLD_PICKAXE) {
                 // copy
@@ -153,12 +151,12 @@ public class EventListener implements Listener {
                     Inventory copy = config.getCopy(player);
                     if (copy != null) {
                         config.getTreasure(block).pasteInventory(copy);
-                        ServerUtils.send(player, LangKeys.format("pasteSuccess"));
+                        config.send(player, "pasteSuccess");
                     } else {
-                        ServerUtils.send(player, LangKeys.format("noCopy"));
+                        config.send(player, "noCopy");
                     }
                 } else {
-                    ServerUtils.send(player, LangKeys.format("noTreasure"));
+                    config.send(player, "noTreasure");
                 }
             } else if (stack != null && stack.getType() == Material.GOLD_AXE) {
                 // open
@@ -167,7 +165,7 @@ public class EventListener implements Listener {
                 if (box != null) {
                     player.openInventory(box.getInventory());
                 } else {
-                    ServerUtils.send(player, LangKeys.format("noTreasure"));
+                    config.send(player, "noTreasure");
                 }
             }
         }
@@ -181,7 +179,7 @@ public class EventListener implements Listener {
                     inv.clear();
                     block.setType(Material.AIR);
                 }
-                TreasureTask.runNewTask(block, treasure, plugin, false);
+                TreasureTask.runNewTask(block, treasure, plugin, config, false);
             }
         }
     }

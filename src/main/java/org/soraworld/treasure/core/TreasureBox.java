@@ -8,7 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.soraworld.treasure.config.LangKeys;
+import org.soraworld.treasure.config.Config;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class TreasureBox {
 
     private final Inventory inv;
 
-    public TreasureBox(Block block, int refresh, int rand_amount, int line_amount, boolean override, boolean disappear, boolean broadcast, NBTTagList list) {
+    public TreasureBox(Config config, Block block, int refresh, int rand_amount, int line_amount, boolean override, boolean disappear, boolean broadcast, NBTTagList list) {
         this.refresh = refresh < 0 ? 0 : refresh;
 
         if (rand_amount < 0) this.rand_amount = 0;
@@ -39,7 +39,7 @@ public class TreasureBox {
         this.override = override;
         this.disappear = disappear;
         this.broadcast = broadcast;
-        this.inv = Bukkit.createInventory(null, 9 * line_amount, getInvName(block));
+        this.inv = Bukkit.createInventory(null, 9 * line_amount, getInvName(block, config));
         for (int i = 0; i < list.size(); i++) {
             NBTTagCompound item = list.get(i);
             int slot = item.getByte("slot");
@@ -49,9 +49,10 @@ public class TreasureBox {
         }
     }
 
-    private String getInvName(Block block) {
-        if (block != null && block.getWorld() != null)
-            return LangKeys.format("invName", block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+    private String getInvName(Block block, Config config) {
+        if (block != null && block.getWorld() != null) {
+            return config.iiLang.format("invName", block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+        }
         return "";
     }
 

@@ -1,6 +1,6 @@
 /.gradle
 /.idea
 /build
-/lib/spigot-1.7.10.jar
+/lib
 /out
 *.iml

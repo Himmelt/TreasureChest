@@ -1,43 +1,51 @@
 package org.soraworld.treasure;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.event.Listener;
 import org.soraworld.treasure.command.CommandTreasure;
-import org.soraworld.treasure.command.IICommand;
 import org.soraworld.treasure.config.Config;
+import org.soraworld.treasure.constant.Constant;
 import org.soraworld.treasure.listener.EventListener;
-import org.soraworld.treasure.util.ListUtils;
+import org.soraworld.violet.VioletPlugin;
+import org.soraworld.violet.command.IICommand;
+import org.soraworld.violet.config.IIConfig;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-public class TreasureChest extends JavaPlugin {
+public class TreasureChest extends VioletPlugin {
 
-    private Config config;
-    private IICommand command;
-
-    @Override
-    public void onEnable() {
-        config = new Config(this.getDataFolder(), this);
-        config.load();
-        config.save();
-        this.getServer().getPluginManager().registerEvents(new EventListener(config, this), this);
-        command = new CommandTreasure("treasure", this, config);
+    @Nonnull
+    protected IIConfig registerConfig(File path) {
+        return new Config(path, this);
     }
 
-    @Override
-    public void onDisable() {
-        config.save();
+    @Nonnull
+    protected List<Listener> registerEvents(IIConfig iiConfig) {
+        ArrayList<Listener> listeners = new ArrayList<>();
+        if (config instanceof Config) {
+            Config cfg = (Config) config;
+            listeners.add(new EventListener(cfg, this));
+        }
+        return listeners;
     }
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        return command.execute(sender, ListUtils.arrayList(args));
+    @Nullable
+    protected IICommand registerCommand(IIConfig config) {
+        if (config instanceof Config) {
+            return new CommandTreasure(Constant.PLUGIN_ID, Constant.PERM_ADMIN, this, (Config) config);
+        }
+        return null;
     }
 
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-        return command.onTabComplete(sender, cmd, alias, args);
+    protected void afterEnable() {
+
+    }
+
+    protected void beforeDisable() {
+
     }
 
 }

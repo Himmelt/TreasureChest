@@ -2,19 +2,19 @@
 
 ### 指令
 ```
-/treasure lang [zh_cn,en_us,...] 查看/设置语言
-/treasure save 保存配置到文件
-/treasure reload 从文件重新载入配置
-/treasure create 在左键选择的位置创建宝箱(配置是默认的，需要手动修改配置文件后重载)
-/treasure open 打开最近左键选择的位置处的宝箱仓库
-/treasure open x,y,z 打开玩家所在世界的<x,y,z>坐标处的宝箱仓库
-/treasure open world,x,y,z 打开给定坐标处的宝箱仓库
-/treasure copy 复制最近选择位置处得宝箱仓库
-/treasure paste 粘贴最近复制得宝箱仓库到最近选择位置的宝箱
-/treasure delete 删除最近选择的宝箱
-/treasure run 启动所有宝箱生成，如果宝箱不是覆盖模式则不会生成
-/treasure run force 强制启动所有宝箱生成，原来的非空气方块会被覆盖
-/treasure stop 停止所有宝箱刷新
+/treasure lang [zh_cn,en_us,...]   查看/设置语言
+/treasure save                     保存配置到文件
+/treasure reload                   从文件重新载入配置
+/treasure create                   在左键选择的位置创建宝箱(配置是默认的，需要手动修改配置文件后重载)
+/treasure open                     打开最近左键选择的位置处的宝箱仓库
+/treasure open x,y,z               打开玩家所在世界的<x,y,z>坐标处的宝箱仓库
+/treasure open world,x,y,z         打开给定坐标处的宝箱仓库
+/treasure copy                     复制最近选择位置处得宝箱仓库
+/treasure paste                    粘贴最近复制得宝箱仓库到最近选择位置的宝箱
+/treasure delete                   删除最近选择的宝箱
+/treasure run                      启动所有宝箱生成，如果宝箱不是覆盖模式则不会生成
+/treasure run force                强制启动所有宝箱生成，原来的非空气方块会被覆盖
+/treasure stop                     停止所有宝箱刷新
 ```
 
 ### 工具使用说明

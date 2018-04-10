@@ -1,23 +1,23 @@
-# ÖĞÎÄÓïÑÔÎÄ¼ş(Chinese Language File)
-# ÔÚÖĞÎÄwindowsÏµÍ³ÏÂÇëÊ¹ÓÃGB2312±àÂë(Please use GB2312 encoding on zh_CN Windows OS)
+# ä¸­æ–‡è¯­è¨€æ–‡ä»¶(Chinese Language File)
+# è¯·ä½¿ç”¨ UTF-8 ç¼–ç 
 
-chatHead: "[Ëæ»ú±¦Ïä] "
+chatHead: "[éšæœºå®ç®±] "
 
-language: "µ±Ç°ÓïÑÔÎª: %s ."
-configSaved: "ÅäÖÃÎÄ¼şÒÑ±£´æ."
-configReloaded: "ÅäÖÃÎÄ¼şÒÑÖØÔØ."
-configLoadFailed: "&cÅäÖÃÎÄ¼şÖØÔØÒì³£,Çë²é¿´¿ØÖÆÌ¨±¨´íĞÅÏ¢!!!"
+language: "å½“å‰è¯­è¨€ä¸º: %s ."
+configSaved: "é…ç½®æ–‡ä»¶å·²ä¿å­˜."
+configReloaded: "é…ç½®æ–‡ä»¶å·²é‡è½½."
+configLoadFailed: "&cé…ç½®æ–‡ä»¶é‡è½½å¼‚å¸¸,è¯·æŸ¥çœ‹æ§åˆ¶å°æŠ¥é”™ä¿¡æ¯!!!"
 
-existTreasure: "ËùÑ¡Î»ÖÃÒÑ¾­´æÔÚ±¦Ïä."
-createTreasure: "ÔÚËùÑ¡Î»ÖÃ³É¹¦´´½¨±¦Ïä."
-notSelect: "µ±Ç°Ã»ÓĞÑ¡ÖĞÎ»ÖÃ."
-noTreasure: "ËùÑ¡Î»ÖÃ²»´æÔÚ±¦Ïä."
-blockSelected: "ÒÑÑ¡ÖĞÒ»¸öÎ»ÖÃ."
-errorArgs: "²ÎÊı´íÎó"
-noPermission: "ÄãĞèÒª <&c%s&r> È¨ÏŞ²ÅÄÜ´ò¿ªÕâ¸ö±¦Ïä."
-noCopy: "ÇëÏÈ¸´ÖÆ²Ö¿âÄÚÈİ."
-copySuccess: "ÒÑ¸´ÖÆ²Ö¿â."
-pasteSuccess: "ÒÑÕ³Ìù²Ö¿â."
-deleteTreasure: "ÒÑÉ¾³ı±¦Ïä."
+existTreasure: "æ‰€é€‰ä½ç½®å·²ç»å­˜åœ¨å®ç®±."
+createTreasure: "åœ¨æ‰€é€‰ä½ç½®æˆåŠŸåˆ›å»ºå®ç®±."
+notSelect: "å½“å‰æ²¡æœ‰é€‰ä¸­ä½ç½®."
+noTreasure: "æ‰€é€‰ä½ç½®ä¸å­˜åœ¨å®ç®±."
+blockSelected: "å·²é€‰ä¸­ä¸€ä¸ªä½ç½®."
+errorArgs: "å‚æ•°é”™è¯¯"
+noPermission: "ä½ éœ€è¦ <&c%s&r> æƒé™æ‰èƒ½æ‰“å¼€è¿™ä¸ªå®ç®±."
+noCopy: "è¯·å…ˆå¤åˆ¶ä»“åº“å†…å®¹."
+copySuccess: "å·²å¤åˆ¶ä»“åº“."
+pasteSuccess: "å·²ç²˜è´´ä»“åº“."
+deleteTreasure: "å·²åˆ é™¤å®ç®±."
 
-invName: "±¦Ïä[%s,%d,%d,%d]"
+invName: "å®ç®±[%s,%d,%d,%d]"

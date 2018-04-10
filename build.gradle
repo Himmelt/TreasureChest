@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group = 'org.soraworld.treasure'
-version = '1.7.10-1.1.4'
+version = '1.7.10-1.2.0'
 description = 'TreasureChest Plugin'
 archivesBaseName = "TreasureChest"
 
@@ -21,4 +21,5 @@ repositories {
 dependencies {
     compile 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT'
     compile files('lib/spigot-1.7.10.jar')
+    compile files('lib/Violet-1.7.10-1.1.6.jar')
 }
