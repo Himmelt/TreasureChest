@@ -3,11 +3,6 @@
 
 chatHead: "[TreasureChest] "
 
-language: "current language is: %s ."
-configSaved: "config file saved."
-configReloaded: "config file reloaded."
-configLoadFailed: "config file reload exception,check the console for more info !!!"
-
 existTreasure: "a treasure-box already exist at selected pos."
 createTreasure: "created a treasure-box at selected pos."
 notSelect: "no selected pos."

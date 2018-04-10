@@ -8,7 +8,7 @@ description: TreasureChest.
 commands:
   treasure:
     description: "TreasureChest - https://github.com/Himmelt/TreasureChest"
-    usage: "/treasure save|reload|lang|create|copy|paste|open|run|stop"
+    usage: "/treasure create|copy|paste|open|run|stop"
     permission: treasure.admin
     permission-message: "You have no permission <treasure.admin>"
 permissions:
