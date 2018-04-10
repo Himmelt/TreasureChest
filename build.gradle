@@ -2,7 +2,6 @@ apply plugin: 'java'
 
 group = 'org.soraworld.treasure'
 version = '1.7.10-1.2.0'
-description = 'TreasureChest Plugin'
 archivesBaseName = "TreasureChest"
 
 sourceCompatibility = targetCompatibility = '1.7'

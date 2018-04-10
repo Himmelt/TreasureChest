@@ -2,8 +2,10 @@ name: TreasureChest
 version: 1.7.10-1.2.0
 author: Himmelt
 main: org.soraworld.treasure.TreasureChest
+depend: [Violet]
+softdepend: []
 website: https://github.com/Himmelt/TreasureChest
-description: TreasureChest.
+description: TreasureChest Plugin.
 
 commands:
   treasure:
