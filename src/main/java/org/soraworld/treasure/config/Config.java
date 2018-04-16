@@ -26,19 +26,17 @@ import java.util.List;
 public class Config extends IIConfig {
 
     private final File nbt_file;
-
+    private final Plugin plugin;
     private final HashMap<Block, TreasureBox> blocks = new HashMap<>();
     private final HashMap<IChunk, List<Block>> chunks = new HashMap<>();
     private final HashMap<Player, Block> selects = new HashMap<>();
     private final HashMap<Player, Inventory> origins = new HashMap<>();
 
     public Config(File path, Plugin plugin) {
-        super(path, plugin);
+        super(path);
+        this.plugin = plugin;
         this.nbt_file = new File(path, "inventory.nbt");
     }
-
-    /*        this.nbt_file = new File(path, "inventory.nbt");
-     */
 
     protected void loadOptions() {
         clearBlocks();
@@ -46,11 +44,11 @@ public class Config extends IIConfig {
         try {
             comp = NBTCompressedStreamTools.a(new FileInputStream(nbt_file));
         } catch (Throwable e) {
-            if (debug) e.printStackTrace();
+            if (getDebug()) e.printStackTrace();
         }
         if (comp == null) comp = new NBTTagCompound();
-        // TODO 宝箱单独配置 一个世界一个文件 over_world.yml
-        ConfigurationSection boxes = config_yaml.getConfigurationSection("boxes");
+        // TODO one world one config: over_world.yml
+        ConfigurationSection boxes = getCfgYaml().getConfigurationSection("boxes");
         if (boxes != null) {
             for (String key : boxes.getKeys(false)) {
                 ConfigurationSection box = boxes.getConfigurationSection(key);
@@ -74,7 +72,7 @@ public class Config extends IIConfig {
                                 );
                             }
                         } catch (Throwable e) {
-                            if (debug) e.printStackTrace();
+                            if (getDebug()) e.printStackTrace();
                         }
                     }
                 }
@@ -84,7 +82,7 @@ public class Config extends IIConfig {
 
     protected void saveOptions() {
         NBTTagCompound comp = new NBTTagCompound();
-        ConfigurationSection boxes = config_yaml.createSection("boxes");
+        ConfigurationSection boxes = getCfgYaml().createSection("boxes");
         if (boxes != null) {
             for (Block block : blocks.keySet()) {
                 World world = block.getWorld();
@@ -106,26 +104,12 @@ public class Config extends IIConfig {
         try {
             NBTCompressedStreamTools.a(comp, new FileOutputStream(nbt_file));
         } catch (Throwable e) {
-            if (debug) e.printStackTrace();
+            if (getDebug()) e.printStackTrace();
         }
     }
 
     public void afterLoad() {
 
-    }
-
-    @Nonnull
-    protected ChatColor defaultChatColor() {
-        return ChatColor.YELLOW;
-    }
-
-    @Nonnull
-    protected String defaultChatHead() {
-        return "[" + Constant.PLUGIN_NAME + "] ";
-    }
-
-    public String defaultAdminPerm() {
-        return Constant.PERM_ADMIN;
     }
 
     private void clearBlocks() {
@@ -230,4 +214,21 @@ public class Config extends IIConfig {
         return origins.get(player);
     }
 
+    @Nonnull
+    public String getAdminPerm() {
+        return Constant.PERM_ADMIN;
+    }
+
+    @Nonnull
+    public ChatColor getHeadColor() {
+        return ChatColor.YELLOW;
+    }
+
+    @Nonnull
+    public String getPlainHead() {
+        return "[" + Constant.PLUGIN_NAME + "] ";
+    }
+
+    public void setPlainHead(String s) {
+    }
 }

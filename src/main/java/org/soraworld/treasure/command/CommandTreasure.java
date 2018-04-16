@@ -12,15 +12,14 @@ import org.soraworld.treasure.task.TreasureTask;
 import org.soraworld.violet.command.CommandViolet;
 import org.soraworld.violet.command.IICommand;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CommandTreasure extends CommandViolet {
 
-    public CommandTreasure(String name, String perm, final Plugin plugin, final Config config) {
-        super(name, perm, config, plugin);
+    public CommandTreasure(String name, String perm, final Config config, final Plugin plugin) {
+        super(name, perm, config);
         addSub(new IICommand("create", null, config, true) {
-            @Override
-            public boolean execute(Player player, ArrayList<String> args) {
+            public boolean execute(Player player, List<String> args) {
                 Block select = config.getSelect(player);
                 if (select != null) {
                     if (config.hasTreasure(select)) {
@@ -37,8 +36,7 @@ public class CommandTreasure extends CommandViolet {
             }
         });
         addSub(new IICommand("delete", null, config, true) {
-            @Override
-            public boolean execute(Player player, ArrayList<String> args) {
+            public boolean execute(Player player, List<String> args) {
                 Block select = config.getSelect(player);
                 if (config.hasTreasure(select)) {
                     config.deleteTreasure(select);
@@ -51,8 +49,7 @@ public class CommandTreasure extends CommandViolet {
             }
         });
         addSub(new IICommand("copy", null, config, true) {
-            @Override
-            public boolean execute(Player player, ArrayList<String> args) {
+            public boolean execute(Player player, List<String> args) {
                 Block select = config.getSelect(player);
                 if (select != null) {
                     if (config.hasTreasure(select)) {
@@ -69,8 +66,7 @@ public class CommandTreasure extends CommandViolet {
             }
         });
         addSub(new IICommand("paste", null, config, true) {
-            @Override
-            public boolean execute(Player player, ArrayList<String> args) {
+            public boolean execute(Player player, List<String> args) {
                 Block select = config.getSelect(player);
                 if (select != null) {
                     if (config.hasTreasure(select)) {
@@ -91,8 +87,7 @@ public class CommandTreasure extends CommandViolet {
             }
         });
         addSub(new IICommand("open", null, config, true) {
-            @Override
-            public boolean execute(Player player, ArrayList<String> args) {
+            public boolean execute(Player player, List<String> args) {
                 if (args.isEmpty()) {
                     Block select = config.getSelect(player);
                     if (select != null) {
@@ -130,16 +125,14 @@ public class CommandTreasure extends CommandViolet {
             }
         });
         addSub(new IICommand("run", config) {
-            @Override
-            public boolean execute(CommandSender sender, ArrayList<String> args) {
+            public boolean execute(CommandSender sender, List<String> args) {
                 if (args.isEmpty()) config.runAll(false);
                 else if (args.get(0).equals("force")) config.runAll(true);
                 return true;
             }
         });
         addSub(new IICommand("stop", config) {
-            @Override
-            public boolean execute(CommandSender sender, ArrayList<String> args) {
+            public boolean execute(CommandSender sender, List<String> args) {
                 TreasureTask.stopAll(plugin);
                 return true;
             }

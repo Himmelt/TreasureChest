@@ -51,7 +51,7 @@ public class TreasureBox {
 
     private String getInvName(Block block, Config config) {
         if (block != null && block.getWorld() != null) {
-            return config.iiLang.format("invName", block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+            return config.formatKey("invName", block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
         }
         return "";
     }

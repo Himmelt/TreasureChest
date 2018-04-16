@@ -51,7 +51,7 @@ public class TreasureTask extends BukkitRunnable {
                             if (stack != null) inv.setItem(i, stack.clone());
                         }
                     } catch (Throwable e) {
-                        if (config.debug()) e.printStackTrace();
+                        if (config.getDebug()) e.printStackTrace();
                         config.console("TreasureTask.run::inv errors");
                     }
                 }
